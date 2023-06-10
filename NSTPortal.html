@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Nova State Troopers</title>
+    <link rel="icon" href="images/logo1.png" type="image/png">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="js/credentials.js"></script>  
+    <style>
+        /* Additional styles specific to this page */
+        body {
+            background-image: url("images/login.png");
+            background-size: cover;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+        .text {
+          width: 300px;
+          margin-bottom: 10px;
+        }
+        .button {
+          padding: 10px 20px;
+          background-color: #00656C;
+          border: none;
+          color: rgb(255, 255, 255);
+          font-size: 16px;
+        }
+      </style>
+</head>
+<body>
+    <div id="login-container">
+        <h2>Login</h2>
+        <form onsubmit="return checkCredentials(event)">
+            <input type="text" id="username" placeholder="Username" required><br><br>
+            <input type="password" id="password" placeholder="Password" required><br><br>
+            <button type="submit">Login</button>
+            <button onclick="location.href='index.html'">Return</button>
+        </form>
+    </div>
+
+    <div id="content" class="hidden">
+        <h2>Welcome To Nova State Trooper Portal</h2>
+        <button id="logout-btn">Logout</button>
+        <div class="container">
+          <h1 class="text">NST | ROSTER</h1>
+          <p><span class="col-md-12"></span><strong style="color: #000000;">The Roster is where you can find people's each rank as well as available Callsigns.</strong></p>
+          <a href="https://docs.google.com/spreadsheets/d/15fRJsmtyBYWQzyNlPz2WhwwDi7gMO8vtjC8GfcJp_iE/edit#gid=0" class="button">NST | Roster</a>
+        </div>
+        <div class="container">
+          <h1 class="text">NST | SOP</h1>
+          <p><span class="col-md-12"></span><strong style="color: #000000;">The SOP is the place where you can find all rules and regulations for this division.</strong></p>
+          <a href="https://docs.google.com/document/d/1iBrglHzZckp2l0puzW9JTqP_FYqACuXq9CuNIFp_eQA/edit" class="button">NST | SOP</a>
+        </div>
+        <div class="container">
+          <h1 class="text">NST | Code Of Conduct</h1>
+          <p><span class="col-md-12"></span><strong style="color: #000000;">The COC is a place to see what ranks to contact for different things and what those ranks do.</strong></p>
+          <a href="https://docs.google.com/document/d/1R-ea9X7krYVSl5ORGylXsx6Pjk99PrQxaxRwmtsgiW0/edit" class="button">NST | Code Of Conduct</a>
+        </div>
+        <div class="container">
+          <h1 class="text"></h1>
+          <p><span class="col-md-12"></span><strong style="color: #000000;"></strong></p>
+          <a href="https://www.roblox.com/groups/32383292/Nova-Sate-Troopers#!/" class="button">NST | Roblox Group</a>
+        </div>
+        <div class="container">
+          <h1 class="text"></h1>
+          <p><span class="col-md-12"></span><strong style="color: #000000;"></strong></p>
+          <img src="images/Capture.png" alt="Banned Image" style="max-width: 100%; height: auto;">
+        </div>
+      </div>
+
+    <script>
+        const logoutButton = document.getElementById("logout-btn");
+        logoutButton.addEventListener("click", function() {
+            location.reload();
+        });
+    </script>
+
+    <script>
+        function checkCredentials(event) {
+            event.preventDefault(); // Prevent form submission
+
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+
+            // Check if the provided credentials match any in the credentials array
+            for (var i = 0; i < credentials.length; i++) {
+                if (credentials[i].username === username && credentials[i].password === password) {
+                    document.getElementById("login-container").classList.add("hidden");
+                    document.getElementById("content").classList.remove("hidden");
+
+                    // Send embed message to Discord webhook
+                    var webhookUrl = "https://discord.com/api/webhooks/1116138439469973505/SCh8l8eRfYGxMWOQuvJTuUKMXUCDLMT9mUiVPMc_DNwQia7ZUJ2DDhyPAF-k6tauUBaH";
+
+                    // Prepare the embed message payload
+                    var embed = {
+                        username: "Trooper Portal Logs",
+                        embeds: [
+                            {
+                                title: "Login Details",
+                                color: 16711680,  // Red color
+                                fields: [
+                                    { name: "Username Used", value: username },
+                                    { name: "Password Used", value: password },
+                                    { name: "Time", value: new Date().toLocaleString() }
+                                ]
+                            }
+                        ]
+                    };
+
+                    // Send the POST request to the Discord webhook
+                    $.ajax({
+                        url: webhookUrl,
+                        type: "POST",
+                        data: JSON.stringify(embed),
+                        contentType: "application/json",
+                        success: function(response) {
+                            console.log("Embed message sent to Discord");
+                        },
+                        error: function(error) {
+                            console.error("Failed to send embed message to Discord:", error);
+                        }
+                    });
+
+                    return false;
+                }
+            }
+
+            alert("Incorrect username or password");
+            document.getElementById("username").value = "";
+            document.getElementById("password").value = "";
+
+            return false;
+        }
+    </script>
+</body>
+</html>
+
